@@ -1,0 +1,206 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| info               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| wscube             |
++--------------------+
+6 rows in set (0.07 sec)
+
+mysql> create database student;
+Query OK, 1 row affected (0.05 sec)
+
+mysql> use student;
+Database changed
+mysql> create table student_info(sid int(10) primary key,sname varchar(20),ssal float(20));
+Query OK, 0 rows affected, 1 warning (0.12 sec)
+
+mysql> desc student_info;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| sid   | int         | NO   | PRI | NULL    |       |
+| sname | varchar(20) | YES  |     | NULL    |       |
+| ssal  | float       | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.07 sec)
+
+mysql> insert into student_info values(1,"akash",30000),(2,"ravi",7043.3),(3,"chetan",7683.4),(4,"anant",8930.8);
+Query OK, 4 rows affected (0.06 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from student_info;
++-----+--------+--------+
+| sid | sname  | ssal   |
++-----+--------+--------+
+|   1 | akash  |  30000 |
+|   2 | ravi   | 7043.3 |
+|   3 | chetan | 7683.4 |
+|   4 | anant  | 8930.8 |
++-----+--------+--------+
+4 rows in set (0.00 sec)
+
+mysql> delete from student_info where ssal=30000;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from student_info;
++-----+--------+--------+
+| sid | sname  | ssal   |
++-----+--------+--------+
+|   2 | ravi   | 7043.3 |
+|   3 | chetan | 7683.4 |
+|   4 | anant  | 8930.8 |
++-----+--------+--------+
+3 rows in set (0.00 sec)
+
+mysql> update student_info set ssal=5000 where sid=2;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student_info;
++-----+--------+--------+
+| sid | sname  | ssal   |
++-----+--------+--------+
+|   2 | ravi   |   5000 |
+|   3 | chetan | 7683.4 |
+|   4 | anant  | 8930.8 |
++-----+--------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select count(sid) from student_info;
++------------+
+| count(sid) |
++------------+
+|          3 |
++------------+
+1 row in set (0.06 sec)
+
+mysql> select count(*) from student_info;
++----------+
+| count(*) |
++----------+
+|        3 |
++----------+
+1 row in set (0.04 sec)
+
+mysql> select avg(ssal) from student_info;
++-------------------+
+| avg(ssal)         |
++-------------------+
+| 7204.733235677083 |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> select min(ssal) from student_info;
++-----------+
+| min(ssal) |
++-----------+
+|      5000 |
++-----------+
+1 row in set (0.04 sec)
+
+mysql> select max(ssal) from student_info;
++-----------+
+| max(ssal) |
++-----------+
+|    8930.8 |
++-----------+
+1 row in set (0.00 sec)
+mysql> create table dept( dno int(10)  primary key ,dname varchar(20));
+Query OK, 0 rows affected, 1 warning (0.07 sec)
+
+mysql> select * from dept;
++-----+--------------+
+| dno | dname        |
++-----+--------------+
+|   1 | comp         |
+|   2 | mechanical   |
+|   3 | civil        |
+|   4 | mechatronics |
++-----+--------------+
+4 rows in set (0.00 sec)
+
+mysql> select student_info.sname,dept.dname from student_info inner join dept on student_info.sid=dept.dno;
++--------+--------------+
+| sname  | dname        |
++--------+--------------+
+| rakesh | comp         |
+| ravi   | mechanical   |
+| chetan | civil        |
+| anant  | mechatronics |
++--------+--------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into dept values(5,"structure");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select student_info.sname,dept.dname from student_info left join dept on student_info.sid=dept.dno;
++--------+--------------+
+| sname  | dname        |
++--------+--------------+
+| rakesh | comp         |
+| ravi   | mechanical   |
+| chetan | civil        |
+| anant  | mechatronics |
++--------+--------------+
+4 rows in set (0.00 sec)
+
+mysql> select student_info.sname,dept.dname from student_info right join dept on student_info.sid=dept.dno;
++--------+--------------+
+| sname  | dname        |
++--------+--------------+
+| rakesh | comp         |
+| ravi   | mechanical   |
+| chetan | civil        |
+| anant  | mechatronics |
+| NULL   | structure    |
++--------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into student_info values(5,"raja",5362.0),(6,"ramesh",8362.6);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select student_info.sname,dept.dname from student_info right join dept on student_info.sid=dept.dno;
++--------+--------------+
+| sname  | dname        |
++--------+--------------+
+| rakesh | comp         |
+| ravi   | mechanical   |
+| chetan | civil        |
+| anant  | mechatronics |
+| raja   | structure    |
++--------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select student_info.sname,dept.dname from student_info left join dept on student_info.sid=dept.dno;
++--------+--------------+
+| sname  | dname        |
++--------+--------------+
+| rakesh | comp         |
+| ravi   | mechanical   |
+| chetan | civil        |
+| anant  | mechatronics |
+| raja   | structure    |
+| ramesh | NULL         |
++--------+--------------+
+6 rows in set (0.00 sec)
+
+mysql> create view manoj as select * from student_info where ssal>5000;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from manoj;
++-----+--------+--------+
+| sid | sname  | ssal   |
++-----+--------+--------+
+|   1 | rakesh | 6476.9 |
+|   3 | chetan | 7683.4 |
+|   4 | anant  | 8930.8 |
+|   5 | raja   |   5362 |
+|   6 | ramesh | 8362.6 |
++-----+--------+--------+
+5 rows in set (0.00 sec)
