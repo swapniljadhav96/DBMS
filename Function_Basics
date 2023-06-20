@@ -1,0 +1,58 @@
+//The syntax of creating a stored function in MySQL is as follows://
+
+DELIMITER $$  
+   
+CREATE FUNCTION fun_name(fun_parameter(s))  
+RETURNS datatype  
+[NOT] {Characteristics}  
+fun_body;  
+
+
+//Now, we will create a function that returns the customer occupation based on the age using the below statement.//
+
+DELIMITER $$  
+CREATE FUNCTION Customer_Occupation(  
+    age int  
+)   
+RETURNS VARCHAR(20)  
+DETERMINISTIC  
+BEGIN  
+    DECLARE customer_occupation VARCHAR(20);  
+    IF age > 35 THEN  
+        SET customer_occupation = 'Scientist';  
+    ELSEIF (age <= 35 AND   
+            age >= 30) THEN  
+        SET customer_occupation = 'Engineer';  
+    ELSEIF age < 30 THEN  
+        SET customer_occupation = 'Actor';  
+    END IF;  
+    -- return the customer occupation  
+    RETURN (customer_occupation);  
+END$$  
+DELIMITER;  
+
+
+//We can also see all stored functions available in the current database using the following statement://
+
+SHOW FUNCTION STATUS WHERE db = 'mysqltestdb';  
+
+
+//Stored Function Call//
+Now, we are going to see how stored function is called with the SQL statement. The following statement uses customer_occupation stored function to get the result:
+
+SELECT name, age, Customer_Occupation(age)  
+FROM customer ORDER BY age;  
+
+
+//Stored Function Call in Procedure//
+Here, we are going to see how this function can be called in a stored procedure. This statement creates a procedure in a database that uses Customer_Occupation() stored function.
+
+DELIMITER $$  
+CREATE PROCEDURE GetCustomerDetail()  
+BEGIN  
+    SELECT name, age, Customer_Occupation(age) FROM customer ORDER BY age;  
+END$$  
+DELIMITER ;  
+The below statement can be used to call the stored procedure:
+
+CALL GetCustomerDetail();  
